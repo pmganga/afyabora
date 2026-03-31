@@ -1,0 +1,332 @@
+/* =========================================================
+   AFYABORA - MASTER STYLESHEET
+   ========================================================= */
+
+/* --- 1. CORE STYLES & LAYOUT --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6; /* Modern, clean gray-blue */
+    color: #2c3e50;
+    margin: 0; 
+    padding: 0;
+}
+
+/* Main wrapper for the homepage */
+.container {
+    max-width: 1000px; 
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Keep the forms narrow and centered so they look professional */
+#auth-page, #user-page {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* --- 2. NAVIGATION BAR --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #004d99; /* Deep medical blue */
+    color: white;
+    padding: 15px 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo-area h2 { 
+    margin: 0; 
+    letter-spacing: 1px;
+}
+
+.motto { 
+    font-size: 0.85em; 
+    color: #e6f2ff; 
+    font-style: italic;
+}
+
+/* Specific styling just for the buttons in the Nav bar */
+nav button {
+    background: transparent;
+    border: 1px solid white;
+    border-radius: 4px;
+    margin-left: 10px;
+    padding: 8px 15px;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+nav button:hover { 
+    background: white; 
+    color: #004d99; 
+}
+
+
+/* --- 3. HERO SECTION (Homepage) --- */
+.hero-section {
+    background: linear-gradient(135deg, #004d99 0%, #00aaff 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 20px rgba(0,77,153,0.2);
+}
+
+.hero-content h1 { 
+    font-size: 2.5em; 
+    margin-top: 0; 
+}
+
+.hero-content p { 
+    font-size: 1.2em; 
+    max-width: 700px; 
+    margin: 0 auto 20px auto; 
+    line-height: 1.6;
+}
+
+.hero-btn {
+    background-color: white !important;
+    color: #004d99 !important;
+    padding: 15px 30px !important;
+    font-size: 1.1em !important;
+    border-radius: 25px !important;
+    width: auto !important;
+}
+
+.hero-btn:hover { 
+    background-color: #f0f0f0 !important; 
+}
+
+
+/* --- 4. GRIDS & CARDS (Services & News) --- */
+.section-header { 
+    text-align: center; 
+    margin-bottom: 25px; 
+}
+
+.section-header h3 { 
+    font-size: 1.8em; 
+    color: #004d99; 
+    margin-bottom: 5px;
+}
+
+.section-header p { 
+    color: #666; 
+    margin-top: 0;
+}
+
+.grid-container {
+    display: grid;
+    /* This auto-fit makes it responsive on mobile phones automatically! */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.card, .news-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    transition: transform 0.2s;
+}
+
+.card:hover, .news-card:hover { 
+    transform: translateY(-5px); 
+}
+
+.card h4 { 
+    color: #004d99; 
+    font-size: 1.2em; 
+    margin-top: 0;
+}
+
+.news-card h4 { 
+    margin: 10px 0; 
+    color: #2c3e50;
+    line-height: 1.4;
+}
+
+.news-tag {
+    background-color: #e6f2ff;
+    color: #004d99;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+
+/* --- 5. FORMS & GENERAL BUTTONS --- */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    color: #333;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Standard Action Buttons (Login, Search) */
+button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 100%; /* Full width for forms */
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #004494;
+}
+
+
+/* --- 6. DYNAMIC API RESULTS (Doctor Cards) --- */
+.doctor-card {
+    border-left: 5px solid #0056b3;
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.doctor-card h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.doctor-card p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.doctor-card a {
+    color: #004d99;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.doctor-card a:hover {
+    text-decoration: underline;
+}
+
+.error-text {
+    color: #d9534f;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+/* --- 7. UTILITIES --- */
+/* The magic class that allows our SPA to hide/show pages */
+.hidden {
+    display: none !important;
+}
+/* --- 8. AUTHENTICATION & SOCIAL LOGIN --- */
+.social-login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+    margin-top: 0;
+    transition: background-color 0.2s;
+}
+
+.google-btn:hover { background-color: #f8f9fa; }
+
+.apple-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+.apple-btn:hover { background-color: #333; }
+.apple-btn img { filter: invert(1); /* Makes the Apple logo white */ }
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #777;
+    margin: 25px 0 15px 0;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.divider span {
+    padding: 0 15px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+/* --- 9. HEALTH RADAR SLIDESHOW (Marquee) --- */
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden; /* Hides the cards that slide off the screen */
+    padding: 10px 0;
+    position: relative;
+}
+
+.marquee-track {
+    display: flex;
+    gap: 25px;
+    width: max-content; /* Allows the track to be wider than the screen */
+    /* The animation: 30 seconds, constant speed, runs forever */
+    animation: scrollNews 30s linear infinite; 
+}
+
+/* Pause the slideshow when the user hovers over it to read */
+.marquee-wrapper:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+/* Force the news cards to stay a specific width so they slide uniformly */
+.marquee-track .news-card {
+    width: 320px;
+    flex-shrink: 0; 
+    margin: 0; /* Override any previous margins */
+}
+
+/* The mathematical sliding animation */
+@keyframes scrollNews {
+    0% { transform: translateX(0); }
+    /* Shifts left by exactly half the track width to create a perfect loop */
+    100% { transform: translateX(calc(-50% - 12.5px)); } 
+}
