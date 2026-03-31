@@ -14,11 +14,19 @@ window.onload = function() {
         showPage('home-page');
     }
 
-    // OS Check: Hide the Apple button if the user is NOT on an Apple device
-    const isAppleDevice = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-    if (!isAppleDevice) {
-        const appleBtn = document.getElementById('apple-btn');
-        if (appleBtn) appleBtn.style.display = 'none';
+  // check if user is on an apple device, hide if user is a non-apple user 
+    let userAgentString = navigator.userAgent;
+    let isAppleDevice = false;
+    
+    if (userAgentString.includes("Mac") || userAgentString.includes("iPhone") || userAgentString.includes("iPad")) {
+        isAppleDevice = true;
+    }
+
+    if (isAppleDevice === false) {
+        let appleBtn = document.getElementById('apple-btn');
+        if (appleBtn) {
+            appleBtn.style.display = 'none';
+        }
     }
 };
 
@@ -33,10 +41,10 @@ function showPage(pageId) {
 function socialLogin(provider) {
     isSSOFlow = true; // Set the flag
 
-    // 1. Auto-fill the name we "received" from the provider
+    // Auto-fill the name we "received" from the provider
     document.getElementById('username').value = `${provider} User`;
 
-    // 2. Hide the SSO buttons and Password fields to clean up the form
+    //  Hide the SSO buttons and Password fields to clean up the form
     document.getElementById('sso-container').style.display = 'none';
     document.getElementById('sso-divider').style.display = 'none';
     
@@ -46,13 +54,13 @@ function socialLogin(provider) {
     document.getElementById('confirm-password').style.display = 'none';
     document.getElementById('label-confirm').style.display = 'none';
 
-    // 3. Update the UI to ask for the Country
+    //  Update the UI to ask for the Country
     const errorElement = document.getElementById('auth-error');
     errorElement.innerText = `✅ Securely linked with ${provider}. Please select your country to finish.`;
     errorElement.classList.remove('hidden');
     errorElement.style.color = '#0056b3'; // Friendly blue color
 
-    // 4. Update the main button text
+    //  Update the main button text
     document.getElementById('main-login-btn').innerText = "Complete Profile & Enter";
 }
 
@@ -104,54 +112,52 @@ function showError(element, message) {
     element.classList.remove('hidden');
 }
 
-// =========================================================================
-// EVERYTHING BELOW THIS LINE SHOULD BE YOUR EXISTING CODE (findDoctors, etc)
-// =========================================================================
+
 // Function to handle Log Out
 function logout() {
-    // 1. Clear the user data from the browser's memory
+    // Clear the user data from the browser's memory
     localStorage.removeItem('afyabora_user');
     localStorage.removeItem('afyabora_country');
 
-    // 2. Reset the SSO flag just in case
+
     isSSOFlow = false;
 
-    // 3. Update the Navigation Bar UI
+    // Update the Navigation Bar UI
     document.getElementById('nav-logout-btn').classList.add('hidden');
     document.getElementById('nav-login-btn').classList.remove('hidden');
     
-    // 4. Send them back to the Home Page
+    //  Send them back to the Home Page
     showPage('home-page');
 }
 
-// ... (Keep your existing findDoctors() and displayResults() functions down here) ...
-// This function runs when the user clicks the "Search" button
+
+// User clicks the "Search" button
 async function findDoctors() {
-    // 1. Grab the values from the HTML inputs
+    //  Grab the values from the HTML inputs
     const specialist = document.getElementById('symptom').value;
     const location = document.getElementById('location').value;
     const resultsDiv = document.getElementById('results');
     const searchBtn = document.getElementById('searchBtn');
 
-    // 2. Form Validation: Ensure input is a valid city
+    //  Form Validation: Ensure input is a valid city
     if (!location) {
         resultsDiv.innerHTML = '<p class="error-text">⚠️ Please enter a city or location.</p>';
         return;
     }
 
-    // 3. Show a loading state
+    //  Show a loading state
     resultsDiv.innerHTML = '<p style="text-align:center;">⏳ Searching medical databases...</p>';
     searchBtn.disabled = true; // Prevent double-clicking
 
     try {
-        // 4. Fetch the data from OUR backend (RapidAPI calls)
+        //  Fetch the data from OUR backend (RapidAPI calls)
         const response = await fetch(`/api/find-doctors?specialist=${specialist}&location=${location}`);
         const apiData = await response.json();
 
         // If our backend sent an error back, throw it so the catch block handles it
         if (apiData.error) throw new Error(apiData.error);
 
-        // 5. Send the data array to our helper function to draw it on the screen
+        //  Send the data array to our helper function to draw it on the screen
         displayResults(apiData.data, specialist);
 
     } catch (error) {
@@ -178,13 +184,16 @@ function displayResults(doctorsArray, specialist) {
 
     // Loop through each doctor/clinic and create an HTML card for them
     doctorsArray.forEach(doc => {
-        // Using optional chaining (?) and OR (||) to handle missing data gracefully
+
         const name = doc.name || 'Unnamed Clinic';
         const address = doc.full_address || doc.address || 'Address not listed';
         const phone = doc.phone_number || 'No phone provided';
         
-        // Check if the API provided a Google Maps link or Website
-        const linkHTML = doc.place_link ? `<a href="${doc.place_link}" target="_blank">🗺️ View on Map</a>` : '';
+// Check if the API provided a Google Maps link
+        let linkHTML = "";
+        if (doc.place_link) {
+            linkHTML = `<a href="${doc.place_link}" target="_blank">🗺️ View on Map</a>`;
+        }
 
         // Add this card to the screen
         resultsDiv.innerHTML += `
@@ -197,7 +206,7 @@ function displayResults(doctorsArray, specialist) {
         `;
     });
 }
-// --- HEALTH RADAR DAILY ROTATION ENGINE ---
+// Health Radar Daily Rotation Engine 
 
 const eacHealthNews = [
     { country: "Kenya", title: "Kiambu Level 5 Receives New MRI Suite", snippet: "The county government has successfully installed state-of-the-art imaging equipment, reducing wait times." },
@@ -209,31 +218,33 @@ const eacHealthNews = [
 ];
 
 function loadDailyNews() {
-    const track = document.getElementById('news-track');
+    let track = document.getElementById('news-track');
     
-    // 1. Calculate the current day of the year (1 - 365) to use as a "rotation" index
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    const diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
-    const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+    // get the current day of the week (0 - 6) to rotate the news
+    let todayDate = new Date();
+    let dayOfWeek = todayDate.getDay(); 
 
-    // 2. Select 3 specific stories based on the day of the year (simulating a daily refresh)
-    const startIndex = dayOfYear % eacHealthNews.length;
     let selectedNews = [];
     
+    // grab 4 news items using a basic loop
     for (let i = 0; i < 4; i++) {
-        // Loop back to the start of the array if we hit the end
-        const index = (startIndex + i) % eacHealthNews.length;
-        selectedNews.push(eacHealthNews[index]);
+        let arrayIndex = (dayOfWeek + i) % eacHealthNews.length;
+        selectedNews.push(eacHealthNews[arrayIndex]);
     }
 
-    // 3. To make an infinite CSS marquee work flawlessly, we must duplicate the selected cards
-    // so there is no "blank space" when the animation resets.
-    const displayNews = [...selectedNews, ...selectedNews];
+    // copy the items a second time so the CSS infinite scroll animation looks smooth
+    let displayNews = [];
+    for (let i = 0; i < selectedNews.length; i++) {
+        displayNews.push(selectedNews[i]);
+    }
+    for (let i = 0; i < selectedNews.length; i++) {
+        displayNews.push(selectedNews[i]);
+    }
 
-    // 4. Inject the HTML into the track
+    // put the html on the screen
     track.innerHTML = '';
-    displayNews.forEach(news => {
+    for (let i = 0; i < displayNews.length; i++) {
+        let news = displayNews[i];
         track.innerHTML += `
             <div class="news-card">
                 <span class="news-tag">${news.country}</span>
@@ -241,8 +252,7 @@ function loadDailyNews() {
                 <p>${news.snippet}</p>
             </div>
         `;
-    });
+    }
 }
-
 // Ensure the news loads immediately when the script runs
 loadDailyNews();
